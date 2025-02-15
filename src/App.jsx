@@ -9,38 +9,15 @@ import './Style.css'
 import { PasswordInput } from './components/PasswordInput'
 import { Anchor } from './components/Anchor'
 import { Heading } from './components/Heading'
+import SignIn from './Pages/SignIn'
 
 function App() {
   
 
   return (
     <div className="m-20 space-y-8">
-      <div className='max-w-md space-y-4'>
-        <Text size='x1' weight='bold'>
-          Sign In
-        </Text>
-
-        <TextInput
-        Iabel ="Email"
-        placeholder='your@email.com'
-        icon={<IconMail className='w-5 h-5 text-gray-400'/>}
-        ></TextInput>
-
-        <PasswordInput 
-        label='Password'
-        placeholder='Enter your password'
-        error='Password must be at least 8 characters'
-        icon={<IconLock className='w-5 h-5 text-gray-400'></IconLock>}
-        ></PasswordInput>
-        <Button className='w-full'>Sign In</Button>
-        <div className='text-center'>
-          <text size="sm" className='text-gray-600'>
-          Don't have an account? <Anchor></Anchor>
-          </text>
-        </div>
-        
-      </div>
-
+      
+{/* 
       <div className="space-y-4">
         <Text size="lg">Button Variants</Text>
         <div className="space-x-4">
@@ -61,7 +38,9 @@ function App() {
           <Heading type={5}>Heading 5</Heading>
           <Heading type={6}>Heading 6</Heading>
         </div>
-      </div>
+      </div> */}
+
+      <SignIn></SignIn>
        
     </div>
   )
