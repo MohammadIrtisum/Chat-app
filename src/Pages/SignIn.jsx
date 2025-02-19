@@ -1,70 +1,108 @@
-import { IconLock, IconMail } from "@tabler/icons-react";
+import {
+  IconMail,
+  IconLock,
+  IconMessages
+} from "@tabler/icons-react";
+import { useForm } from "react-hook-form";
 import { PasswordInput } from "../components/PasswordInput";
 import { Text } from "../components/Text";
 import { TextInput } from "../components/TextInput";
 import { Button } from "../components/Button";
 import { Anchor } from "../components/Anchor";
-import { useState } from "react";
+import { Heading } from "../components/Heading";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
-const SignIn =()=>{
-  const [email,setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isPasswordLessThanEight,SetIspasswordLessThanEight] = useState(false);
+const signInSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8).max(20),
+});
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-    // console.log("email",e.target.value);
-   
-  }
+export default function SignInPage() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(signInSchema),
+  });
 
-  const handlePasswordChange = (e) =>{
-
-    if(e.target.value.length <8){
-      SetIspasswordLessThanEight(true);
-        }
-    else{
-      SetIspasswordLessThanEight(false);
-    }
-
-    setPassword(e.target.value);
-  }
-
-  const handleSignIn = () => {
-    console.log("Email:", email);
-    console.log("Password:", password);
+  const onSubmit = (data) => {
+    console.log(data);
   };
 
-    return(
-        <div className='max-w-md space-y-4'>
-                <Text size='x1' weight='bold'>
-                  Sign In
-                </Text>
-        
-                <TextInput
-                Iabel ="Email"
-                placeholder='your@email.com'
-                icon={<IconMail className='w-5 h-5 text-gray-400'/>}
-                value={email}
-                onChange={handleEmailChange}
-                ></TextInput>
-        
-                <PasswordInput
-                label='Password'
-                placeholder='Enter your password'
-                error={isPasswordLessThanEight && 'Password must be at least 8 characters'}
-                icon={<IconLock className='w-5 h-5 text-gray-400'></IconLock>}
-                value={password}
-                onChange={handlePasswordChange}
-                ></PasswordInput>
-                <Button className='w-full' onClick={handleSignIn}>Sign In</Button>
-                <div className='text-center'>
-                  <text size="sm" className='text-gray-600'>
-                  Don't have an account? <Anchor href="/signup">Sign Up</Anchor>
-                  </text>
-                </div>
-                
-              </div>
-    )
-}
+  return (
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-100">
+      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-xl">
+        {/* Header */}
+        <div className="text-center">
+          <div className="w-16 h-16 bg-indigo-600 rounded-2xl mx-auto flex items-center justify-center">
+            <IconMessages size={32} className="text-white" />
+          </div>
+          <Heading type={3} className="mt-6">
+            Welcome back
+          </Heading>
+          <Text className="mt-2 text-sm text-gray-600">
+            Please sign in to your account
+          </Text>
+        </div>
 
-export default SignIn;
+        {/* Sign In Form */}
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
+          <div className="space-y-4">
+            <TextInput
+              type="email"
+              label="Email address"
+              placeholder="Enter your email"
+              icon={<IconMail size={20} className="text-gray-400" />}
+              error={errors.email?.message}
+              {...register("email")}
+            />
+
+            <PasswordInput
+              label="Password"
+              placeholder="Enter your password"
+              icon={<IconLock size={20} className="text-gray-400" />}
+              error={errors.password?.message}
+              {...register("password")}
+            />
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <input
+                id="remember-me"
+                name="remember-me"
+                type="checkbox"
+                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+              />
+              <label
+                htmlFor="remember-me"
+                className="ml-2 block text-sm text-gray-700"
+              >
+                Remember me
+              </label>
+            </div>
+
+            <Anchor href="#">Forgot password?</Anchor>
+          </div>
+
+          <Button
+            type="submit"
+            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Sign in
+          </Button>
+        </form>
+
+        {/* Sign up link */}
+        <div className="text-center text-sm">
+          <Text className="text-gray-600">
+            Don&apos;t have an account?{" "}
+            <Anchor href="/SignUp">Sign up</Anchor>
+          </Text>
+        </div>
+      </div>
+    </div>
+  );
+}
